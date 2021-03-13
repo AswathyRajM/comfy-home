@@ -36,7 +36,9 @@ class UI {
     console.log(products);
     let result = "";
     products.forEach((product) => {
-      result += `<article class="product">
+      result += `
+         <!-- ---------Single Product----------- -->
+         <article class="product">
           <div class="img-container">
             <img
               src=${product.image}
@@ -49,17 +51,26 @@ class UI {
           </div>
           <h3>${product.title}</h3>
           <h4>$${product.price}</h4>
-        </article>`;
+        </article>
+         <!-- ---------End of Single Product----------- -->
+         `;
     });
     productsDOM.innerHTML = result;
   }
 }
 
 // localstorage
-class Storage {}
+class Storage {
+  static saveProducts(products) {
+    localStorage.setItem("products", JSON.stringify(products));
+  }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   const ui = new UI();
   const products = new Products();
-  products.getProducts().then((products) => ui.displayProducts(products));
+  products.getProducts().then((products) => {
+    ui.displayProducts(products);
+    Storage.saveProducts(products);
+  });
 });
