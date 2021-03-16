@@ -307,6 +307,8 @@ body {
 .fa-chevron-down {
     color: var(--primaryColor);
     text-align: center;
+    cursor: pointer;
+
 }
 
 /*---------- End of Cart Item -------------------- */
