@@ -80,7 +80,7 @@ class UI {
           // save cart in local storage
           Storage.saveCart(cart);
           // set cart values
-          this.setCartValue(cart);
+          this.setCartValues(cart);
           // display cart items
           this.addCartItem(cartItem);
           // show the cart
@@ -91,7 +91,7 @@ class UI {
   }
 
   // set cart values in total amount and number of cart items
-  setCartValue(cart) {
+  setCartValues(cart) {
     let tempTotal = 0;
     let itemsTotal = 0;
     cart.map((item) => {
@@ -122,6 +122,26 @@ class UI {
     cartOverlay.classList.add("transparentBcg");
     cartDOM.classList.add("showCart");
   }
+  setupAPP() {
+    cart = Storage.getCart();
+    this.setCartValues(cart);
+    this.populateCart(cart);
+    cartBtn.addEventListener("click", this.showCart);
+    closeCartBtn.addEventListener("click", this.hideCart);
+  }
+
+  // initial cart items
+  populateCart(cart) {
+    cart.forEach((item) => {
+      this.addCartItem(item);
+    });
+  }
+
+  //hide cart on close button click
+  hideCart() {
+    cartOverlay.classList.remove("transparentBcg");
+    cartDOM.classList.remove("showCart");
+  }
 }
 
 // localstorage
@@ -140,11 +160,19 @@ class Storage {
   static saveCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
   }
+
+  //get cart items initially
+  static getCart() {
+    let cart = localStorage.getItem("cart");
+    return cart ? JSON.parse(cart) : [];
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const ui = new UI();
   const products = new Products();
+  //setup app
+  ui.setupAPP();
   products
     .getProducts()
     .then((products) => {
